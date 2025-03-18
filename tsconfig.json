@@ -1,0 +1,14 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react-native",
+    "types": [
+      "react-native-svg"
+    ]
+  },
+  "include": [
+    "src",
+    "src/declaration.d.ts"
+  ]
+}
