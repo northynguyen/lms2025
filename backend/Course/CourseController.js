@@ -32,7 +32,7 @@ export const getCourseById = async (req, res) => {
 export const updateCourse = async (req, res) => {
     try {
         const updateData = { ...req.body, updatedBy: req.createBy };
-        const updatedCourse = await courseService.updateCourse(req.params.id, updateData);
+        const updatedCourse = await courseService.updateCourse(req.params.id, updateData, req.file);
         if (!updatedCourse) return res.status(404).json({ error: 'Course not found' });
         res.status(200).json(updatedCourse);
     } catch (error) {

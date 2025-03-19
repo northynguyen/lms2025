@@ -15,7 +15,8 @@ export const getCourseById = async (id) => {
     return await Course.findById(id).populate('createdBy updatedBy instructor prerequisites tags language sections');
 };
 
-export const updateCourse = async (id, updateData) => {
+export const updateCourse = async (id, updateData, file) => {
+    if (file) updateData.image = file.path;
     return await Course.findByIdAndUpdate(id, updateData, { new: true });
 };
 

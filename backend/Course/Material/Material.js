@@ -1,4 +1,15 @@
 import mongoose from 'mongoose';
+
+const contentItemSchema = new mongoose.Schema({
+    type: {
+        type: String,
+        enum: ['VIDEO', 'IMAGE', 'TEXT', 'AUDIO', 'DOCUMENT'],
+        required: true
+    },
+    url: { type: String },
+    text: { type: String }
+});
+
 const courseMaterialSchema = new mongoose.Schema({
     section: { type: mongoose.Schema.Types.ObjectId, ref: 'Section', required: true },
     course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
@@ -9,17 +20,16 @@ const courseMaterialSchema = new mongoose.Schema({
     },
     materialName: { type: String, required: true },
     title: { type: String, required: true },
-    materialUrl: { type: String },
     orderNum: { type: Number },
-    expectDuration: { type: Number }, // Thời gian dự kiến hoàn thành
+    expectDuration: { type: Number },
     wordCount: { type: Number },
-    courseMaterialType: { type: String, enum: ['VIDEO', 'DOCUMENT', 'TEXT', 'AUDIO'] },
-    content: { type: String },
+    contentItems: [contentItemSchema],
     studyLogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'StudyLog' }],
-}
-    , {
-        timestamps: true
-    });
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, {
+    timestamps: true
+});
 
 const CourseMaterial = mongoose.model('CourseMaterial', courseMaterialSchema);
 export default CourseMaterial;
