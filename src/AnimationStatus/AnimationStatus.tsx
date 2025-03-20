@@ -99,20 +99,20 @@ const styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
     },
     animation: {
-        width: 150,
-        height: 150,
+        width: 275,
+        height: 275,
     },
     text: {
-        marginTop: 20,
-        fontSize: 18,
+        marginTop: 0,
+        fontSize: 25,
         fontWeight: '600',
         color: colors.textPrimary,
     },
     button: {
-        marginTop: 20,
+        marginTop: 10,
         backgroundColor: colors.primary,
         paddingVertical: 10,
         paddingHorizontal: 30,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: colors.background,
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 25,
     },
 });
 

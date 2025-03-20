@@ -1,7 +1,7 @@
 import User from './User.js';
 import bcrypt from 'bcrypt';
 import Otp from '../Otp/Otp.js';
-
+import Role from '../Role/Role.js';
 // Lấy tất cả người dùng
 export const getAllUsers = async () => await User.find();
 
@@ -17,12 +17,17 @@ export const createUser = async (data) => {
 // Cập nhật người dùng theo ID
 export const updateUser = async (userId, updateData) => {
     try {
-        // Mã hóa mật khẩu nếu có
         if (updateData.password) {
             const hashedPassword = await bcrypt.hash(updateData.password, 10);
             updateData.password = hashedPassword;
         }
-
+        if (updateData.role) {
+            const existingRole = await Role.findOne({ _id: updateData.role });
+            if (!existingRole) {
+                throw new Error('Role not found.');
+            }
+            updateData.role = existingRole._id;
+        }
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
         if (!updatedUser) throw new Error('Không tìm thấy người dùng.');
 

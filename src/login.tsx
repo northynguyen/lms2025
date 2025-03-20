@@ -23,7 +23,11 @@ const LoginScreen = () => {
 
     const dismissKeyboard = () => Keyboard.dismiss();
     const navigation = useNavigation<NavigationProp>();
-
+    useFocusEffect(
+        useCallback(() => {
+            setErrors({});
+        }, [])
+    );
     const validateUsername = (value: string) => {
         if (!value || value.length < 4) {
             setErrors((prev) => ({ ...prev, username: 'Username must have at least 4 characters.' }));
@@ -41,12 +45,12 @@ const LoginScreen = () => {
     };
 
     const isValid = () => !errors.username && !errors.password;
-
     const handleLogin = async () => {
         dismissKeyboard();
         validateUsername(username);
         validatePassword(password);
-        if (!isValid()) return;
+
+        if (!username || !password || !isValid()) return; // Chặn request nếu có lỗi
 
         try {
             setStatus('loading');
@@ -60,9 +64,8 @@ const LoginScreen = () => {
 
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'Login failed');
-            console.log(data);
-            const { token, user } = data;
 
+            const { token, user } = data;
             await setAuth(token, user);
 
             setStatus('success');

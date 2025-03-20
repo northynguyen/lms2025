@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -14,7 +14,7 @@ import {
 import colors from "./Styles/color";
 import EyeIcon from '../icon/eye-solid.svg';
 import EyeOffIcon from '../icon/eye-slash-solid.svg';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from './Main/Main';
 import AnimationStatus from "./AnimationStatus/AnimationStatus";
@@ -36,7 +36,11 @@ const ForgotPassword: React.FC = () => {
     const { url } = useAuth();
 
     const navigation = useNavigation<NavigationProp>();
-
+    useFocusEffect(
+        useCallback(() => {
+            setErrors({});
+        }, [])
+    );
     const validateFields = async () => {
         const newErrors: Record<string, string> = {};
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
     View,
     Text,
@@ -21,7 +21,7 @@ import EyeOffIcon from '../assets/eye-slash-solid.svg';
 import colors from './Styles/color';
 import { RadioButton } from 'react-native-paper';
 import AnimationStatus from './AnimationStatus/AnimationStatus';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from './Main/Main';
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Register'>;
@@ -45,6 +45,17 @@ const RegisterScreen = () => {
         email: '',
     });
     const navigation = useNavigation<NavigationProp>();
+    useFocusEffect(
+        useCallback(() => {
+            setErrors({
+                username: '',
+                password: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+            });
+        }, [])
+    );
     const validateField = (field: string, value: string) => {
         let error = '';
 

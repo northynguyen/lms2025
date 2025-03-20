@@ -22,9 +22,9 @@ export const authenticateUser = async (req, res, next) => {
 export const authorizeRoles = (...allowedRoles) => {
     return (req, res, next) => {
         try {
-            if (!req.user) throw new Error('Chưa xác thực.');
+            if (!req.user) throw new Error('User not authenticated.');
             if (!allowedRoles.includes(req.user.role.name)) {
-                throw new Error('Không có quyền truy cập.');
+                throw new Error('Unauthorized access.');
             }
             req.createdBy = req.user._id;
             next();

@@ -6,7 +6,7 @@ import User from '../User/User.js';
 import Role from '../Role/Role.js';
 
 dotenv.config();
-
+const allowedRoles = ["Student", "Instructor"];
 // Tạo JWT Token
 const generateToken = (user) => {
     return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -18,9 +18,11 @@ export const registerUser = async ({ username, password, firstName, lastName, em
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) throw new Error('Username or Email already exists.');
 
-    // Kiểm tra role hợp lệ
+
     const existingRole = await Role.findOne({ name: role });
-    if (!existingRole) throw new Error(`Role invalid.`);
+    if (!existingRole || !allowedRoles.includes(existingRole.name)) {
+        throw new Error("Role invalid.");
+    }
 
     // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -70,7 +72,6 @@ export const loginUser = async ({ username, password }) => {
         ...user.toObject(),
         role: user.role?.name,
     };
-    console.log(userWithRoleName);
 
     // Tạo token
     const token = generateToken(userWithRoleName);

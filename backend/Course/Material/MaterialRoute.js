@@ -1,7 +1,7 @@
 import express from 'express';
 import * as materialController from './MaterialController.js';
 import { authenticateUser, authorizeRoles } from '../../MiddleWare/AuthMiddleware.js';
-import { uploadMaterial } from '../../MiddleWare/UploadMaterial.js';
+import { uploadMaterial } from '../../Upload/UploadMaterial.js';
 
 const router = express.Router();
 

@@ -34,6 +34,9 @@ export const createUserController = async (req, res) => {
 // Cập nhật người dùng theo ID
 export const updateUserController = async (req, res) => {
     try {
+        if (req.body.role && req.user.role !== "superadmin") {
+            return res.status(403).json({ message: "You cannot change your role." });
+        }
         const updatedUser = await updateUser(req.params.id, req.body);
         if (!updatedUser) return res.status(404).json({ message: 'Users not found.' });
         res.status(200).json(updatedUser);
@@ -101,3 +104,18 @@ export const isEmailUserController = async (req, res) => {
         });
     }
 };
+
+
+export const updateRole = async (req, res) => {
+    try {
+        const updatedUser = await updateUser(req.params.id, req.body);
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json({ message: "Role updated successfully", user: updatedUser });
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+

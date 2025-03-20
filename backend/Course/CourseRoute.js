@@ -1,7 +1,7 @@
 import express from 'express';
 import * as courseController from './CourseController.js';
 import { authenticateUser, authorizeRoles } from '../MiddleWare/AuthMiddleware.js';
-import uploadImage from '../MiddleWare/UploadImage.js';
+import uploadImage from '../Upload/UploadImage.js';
 
 const router = express.Router();
 
