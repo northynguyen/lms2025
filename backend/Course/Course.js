@@ -14,7 +14,7 @@ const courseSchema = new mongoose.Schema({
     price: { type: Number },
     discount: { type: Number, default: 0 },
     durationInWeeks: { type: Number },
-    language: { type: mongoose.Schema.Types.ObjectId, ref: 'Tag', required: true },
+    language: { type: String, required: true },
     level: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced'] },
     sections: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Section', default: [] }],
 }

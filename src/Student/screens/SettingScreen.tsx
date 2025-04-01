@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { useAuth } from '../../Auth/AuthContext';
 
-const ProfileScreen: React.FC = () => {
+const SettingScreen: React.FC = () => {
     const { logout, user } = useAuth();
     return (
         <View style={styles.container}>
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     text: { fontSize: 24, fontWeight: 'bold' },
 });
 
-export default ProfileScreen;
+export default SettingScreen;

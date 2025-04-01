@@ -8,7 +8,14 @@ export const createCourse = async (courseData, file) => {
 };
 
 export const getAllCourses = async (filter = {}) => {
-    return await Course.find(filter).populate('createdBy updatedBy instructor prerequisites tags language sections');
+    const courses = await Course.find(filter)
+        .populate('createdBy updatedBy instructor prerequisites tags language sections').sort({ createdAt: -1 });
+
+    // Thêm discountedPrice vào mỗi khóa học
+    return courses.map(course => ({
+        ...course.toObject(),
+        discountedPrice: course.getDiscountedPrice()
+    }));
 };
 
 export const getCourseById = async (id) => {

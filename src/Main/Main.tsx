@@ -10,7 +10,7 @@ import HomeInstructor from '../Instructor/HomeInstructor';
 import HomeSuperadmin from '../SuperAdmin/HomeSuperadmin';
 import { useAuth } from '../Auth/AuthContext';
 import AnimationStatus from '../AnimationStatus/AnimationStatus';
-
+import RouteStudent from './RouteStudent';
 // Cập nhật RootStackParamList
 export type RootStackParamList = {
     Login: undefined;
@@ -44,7 +44,7 @@ const Main = () => {
                         {user.role === 'Student' && (
                             <Stack.Screen
                                 name="HomeStudent"
-                                component={HomeStudent}
+                                component={RouteStudent}
                                 options={{ headerShown: false }}
                             />
                         )}

@@ -1,26 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { User, AuthContextType } from '../Interfaces/Interfaces';
 
-// Định nghĩa kiểu dữ liệu cho người dùng
-interface User {
-    id: string;
-    username: string;
-    role: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-}
 
-// Tạo Context để lưu trữ token và dữ liệu người dùng
-interface AuthContextType {
-    token: string | null;
-    user: User | null;
-    loading: boolean;
-    setAuth: (token: string, user: User) => Promise<void>;
-    logout: () => Promise<void>;
-    url: string;
-}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {

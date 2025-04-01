@@ -2,13 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import LottieView from 'lottie-react-native';
 import colors from '../Styles/color';
+import { AnimationStatusProps } from '../Interfaces/Interfaces';
 
-interface AnimationStatusProps {
-    status: 'loading' | 'success' | 'error' | null;
-    text?: string;
-    onDone?: () => void;
-    show?: boolean;
-}
 
 const AnimationStatus: React.FC<AnimationStatusProps> = ({ status, text, onDone, show = true }) => {
     const [visible, setVisible] = useState(show);
@@ -99,7 +94,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backgroundColor: 'rgba(255, 255, 255, 1)',
+        zIndex: 9999,
     },
     animation: {
         width: 275,
