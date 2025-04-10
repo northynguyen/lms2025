@@ -65,9 +65,9 @@ const LoginScreen = () => {
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'Login failed');
 
-            const { token, user } = data;
-            await setAuth(token, user);
+            const { token, user, enrollments } = data;
 
+            await setAuth(token, { ...user, enrollments });
             setStatus('success');
             setStatusText('Sign in successful!');
         } catch (error) {

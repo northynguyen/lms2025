@@ -15,14 +15,6 @@ const userSchema = new Schema({
         ref: 'Role',
         required: true
     },
-    enrolledCourses: [
-        {
-            course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
-            progress: { type: Number, default: 0 },
-            completedSections: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Section' }],
-            createdAt: { type: Date, default: Date.now },
-        }
-    ],
     createdCourses: [
         {
             type: mongoose.Schema.Types.ObjectId, ref: 'Course',

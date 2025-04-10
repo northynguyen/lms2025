@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const enrollmentStatusHistorySchema = new mongoose.Schema({
-    status: { type: String, enum: [' PENDING, APPROVED, REJECTED, COMPLETED, CANCELLED'], default: 'PENDING' },
+    status: { type: String, enum: ['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED', 'CANCELLED'], default: 'PENDING' },
     createdAt: { type: Date, default: Date.now }
 })
 const enrollmentSchema = new mongoose.Schema({
@@ -9,7 +9,7 @@ const enrollmentSchema = new mongoose.Schema({
     course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    status: { type: String, enum: [' PENDING, APPROVED, REJECTED, COMPLETED, CANCELLED'], default: 'PENDING' },
+    status: { type: String, enum: ['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED', 'CANCELLED'], default: 'PENDING' },
     grade: { type: Number, default: 0 },
     statusHistory: [enrollmentStatusHistorySchema]
 }, { timestamps: true });

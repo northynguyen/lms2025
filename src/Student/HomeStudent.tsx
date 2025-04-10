@@ -10,7 +10,7 @@ import IconChat from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../Styles/color.ts';
 const Tab = createBottomTabNavigator();
 
-const HomeStudent: React.FC = () => {
+const HomeStudent = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

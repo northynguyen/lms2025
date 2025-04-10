@@ -4,12 +4,12 @@ import OverviewScreen from './Overview';
 import ReviewScreen from './Review';
 import AnimationStatus from '../../../AnimationStatus/AnimationStatus';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
-import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { RouteProp, useRoute, useNavigation, NavigationProp } from '@react-navigation/native';
 import { StudentStackParamList } from '../../../Main/RouteStudent';
 import { useAuth } from '../../../Auth/AuthContext';
 
-import { Course } from '../../../Interfaces/Interfaces';
+import { Course, User } from '../../../Interfaces/Interfaces';
 import colors from '../../../Styles/color';
 
 type CourseDetailsRouteProp = RouteProp<StudentStackParamList, 'CourseDetails'>;
@@ -17,14 +17,14 @@ const Tab = createMaterialTopTabNavigator();
 
 const CourseDetails = () => {
     const route = useRoute<CourseDetailsRouteProp>();
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<StudentStackParamList>>();
     const { courseId } = route.params;
-    const { url } = useAuth();
+    const { url, token, setAuth, user } = useAuth();
 
     const [course, setCourse] = useState<Course | null>(null);
     const [status, setStatus] = useState<'loading' | 'error' | 'success' | null>('loading');
     const [statusText, setStatusText] = useState<string>('Đang tải...');
-
+    console.log('user', user);
     useEffect(() => {
         const fetchCourse = async () => {
             try {
@@ -49,6 +49,42 @@ const CourseDetails = () => {
             <AnimationStatus status={status} text={statusText} onDone={() => setStatus(null)} show={!!status} />
         );
     }
+
+    const handlePaymentPress = async () => {
+        try {
+            if (course.price > 0) {
+                navigation.navigate("PaymentScreen");
+                return;
+            }
+            setStatus('loading');
+            setStatusText('Enrolling...');
+            const response = await fetch(`${url}/api/enrollment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': `${token}`,
+                },
+                body: JSON.stringify({ courseId }),
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Enrollment failed');
+            const updatedEnrollments = [...(user?.enrollments || []), data];
+            if (token && user) {
+                const updatedUser: User = {
+                    ...user,
+                    enrollments: updatedEnrollments,
+                };
+                await setAuth(token, updatedUser);
+            } else {
+                console.error('Token or user is null, cannot update auth state');
+            }
+            setStatus('success');
+            setStatusText('Enrolled successfully!');
+        } catch (error) {
+            setStatus('error');
+            setStatusText(error instanceof Error ? error.message : 'Enrollment failed');
+        }
+    };
     return (
         <View style={styles.container}>
             <AnimationStatus status={status} text={statusText} onDone={() => setStatus(null)} show={!!status} />
@@ -56,16 +92,16 @@ const CourseDetails = () => {
             <Tab.Navigator
                 screenOptions={{
                     tabBarStyle: { backgroundColor: colors.background },
-                    tabBarLabelStyle: { fontSize: 14, fontWeight: 'bold', color: colors.primary },
+                    tabBarLabelStyle: { fontSize: 15, fontWeight: 'bold', color: colors.primary },
                     tabBarIndicatorStyle: { backgroundColor: colors.primary },
                 }}
             >
                 <Tab.Screen name="Overview" component={OverviewScreen} initialParams={{ course }} />
-                <Tab.Screen name="Lesson" component={LessonScreen} />
+                <Tab.Screen name="Lesson" component={LessonScreen} initialParams={{ course }} />
                 <Tab.Screen name="Review" component={ReviewScreen} />
             </Tab.Navigator>
 
-            <TouchableOpacity style={styles.button} onPress={() => console.log('Start Course')}>
+            <TouchableOpacity style={styles.button} onPress={handlePaymentPress}>
                 <Text style={styles.buttonText}>GET ENROLL</Text>
             </TouchableOpacity>
 
@@ -77,16 +113,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.background,
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    loadingText: {
-        marginTop: 10,
-        fontSize: 16,
-        color: colors.textPrimary,
+        marginBottom: 20,
     },
     image: {
         width: '100%',
@@ -99,25 +126,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10,
     },
-    courseId: {
-        fontSize: 16,
-        color: '#666',
-        textAlign: 'center',
-        marginBottom: 10,
-    },
-    description: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginBottom: 20,
-    },
     button: {
         backgroundColor: colors.primary,
-        position: 'absolute',
-        bottom: 20,
-        left: 20,
-        right: 20,
+        marginHorizontal: 20,
         paddingVertical: 15,
         borderRadius: 25,
+        alignItems: 'center',
     },
     buttonText: {
         color: '#fff',

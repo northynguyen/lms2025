@@ -2,10 +2,15 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeStudent from '../Student/HomeStudent';
 import CourseDetails from '../Student/Component/CourseDetails/CourseDetails';
+import MaterialDetails from '../Student/Component/MaterialDetails';
+import PaymentScreen from '../Student/Component/Payment';
+import { Material } from '../Interfaces/Interfaces';
 
 export type StudentStackParamList = {
-    StudentHome: undefined; // Đổi tên tránh trùng
+    StudentHome: undefined;
     CourseDetails: { courseId: string };
+    MaterialDetails: { materialData: Material };
+    PaymentScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<StudentStackParamList>();
@@ -22,6 +27,8 @@ const RouteStudent: React.FC = () => {
                 name="CourseDetails"
                 component={CourseDetails}
             />
+            <Stack.Screen name="MaterialDetails" component={MaterialDetails} />
+            <Stack.Screen name="PaymentScreen" component={PaymentScreen} options={{ title: 'Payment Method' }} />
         </Stack.Navigator>
     );
 };

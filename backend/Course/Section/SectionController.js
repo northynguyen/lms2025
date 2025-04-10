@@ -47,3 +47,12 @@ export const deleteSection = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+// export const getSectionsByCourseId = async (req, res) => {
+//     try {
+//         const sections = await sectionService.getSectionByCourseId(req.params.id);
+//         res.status(200).json(sections);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// };
+

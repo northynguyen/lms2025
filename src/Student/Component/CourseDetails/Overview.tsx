@@ -9,6 +9,33 @@ const OverviewScreen = () => {
     const route = useRoute<OverviewRouteProp>();
     const { course } = route.params;
     const [expanded, setExpanded] = useState(false);
+    //Tự động sắp xếp list tag cho đẹp
+    const distributeTags = (tags: { tagName: string }[]) => {
+        const sortedTags = [...tags].sort((a, b) => a.tagName.length - b.tagName.length);
+        const rows: string[][] = [];
+        let currentRow: string[] = [];
+        let currentLength = 0;
+        const maxPerRow = 20;
+
+        sortedTags.forEach((tag) => {
+            const tagLength = tag.tagName.length;
+            if (currentLength + tagLength <= maxPerRow) {
+                currentRow.push(tag.tagName);
+                currentLength += tagLength;
+            } else {
+                rows.push(currentRow);
+                currentRow = [tag.tagName];
+                currentLength = tagLength;
+            }
+        });
+
+        if (currentRow.length > 0) rows.push(currentRow);
+
+        return rows;
+    };
+
+    const arrangedTags = distributeTags(course.tags);
+
     return (
         <ScrollView style={{ flex: 1, backgroundColor: colors.background }}>
             <View style={styles.container}>
@@ -55,9 +82,13 @@ const OverviewScreen = () => {
                 </View>
                 <Text style={styles.title}>Skills</Text>
                 <View style={styles.tagContainer}>
-                    {course.tags.map((tag, index) => (
-                        <View key={index} style={styles.tag}>
-                            <Text style={styles.tagText}>{tag.tagName}</Text>
+                    {arrangedTags.map((row, rowIndex) => (
+                        <View key={rowIndex} >
+                            {row.map((tag, index) => (
+                                <View key={index} style={styles.tag}>
+                                    <Text style={styles.tagText}>{tag}</Text>
+                                </View>
+                            ))}
                         </View>
                     ))}
                 </View>

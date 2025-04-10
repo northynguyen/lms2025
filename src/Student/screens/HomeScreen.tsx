@@ -24,7 +24,7 @@ const announcements = [
     { id: '2', title: 'System Maintenance: March 25th', date: '3/19/2025' },
 ];
 
-const HomeScreen: React.FC = () => {
+const HomeScreen = () => {
     const { user, url } = useAuth();
     const [courses, setCourses] = useState<Course[]>([]);
     const [greeting, setGreeting] = useState('');
@@ -85,7 +85,7 @@ const HomeScreen: React.FC = () => {
                 <View style={styles.header}>
                     <View>
                         <Text style={styles.greeting}>{greeting},</Text>
-                        <Text style={styles.username}>{user?.firstName}{user?.lastName}</Text>
+                        <Text style={styles.username}>{user?.firstName} {user?.lastName}</Text>
                     </View>
                     <TouchableOpacity
                         style={[styles.searchButton, searchVisible && styles.searchButtonActive]}

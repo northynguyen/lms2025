@@ -19,9 +19,9 @@ export const login = async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        const { user, token } = await loginUser({ username, password });
-        res.status(200).json({ message: 'Sign in successfully.', user, token });
+        const { user, token, enrollments } = await loginUser({ username, password });
 
+        res.status(200).json({ message: 'Sign in successfully.', user, token, enrollments });
     } catch (error) {
         console.error('Login Error:', error);
         res.status(401).json({ error: error.message });

@@ -24,6 +24,7 @@ import AnimationStatus from './AnimationStatus/AnimationStatus';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from './Main/Main';
+import { User } from './Interfaces/Interfaces';
 type NavigationProp = StackNavigationProp<RootStackParamList, 'Register'>;
 const RegisterScreen = () => {
     const [username, setUsername] = useState('');
@@ -109,7 +110,6 @@ const RegisterScreen = () => {
 
     const handleRegister = async () => {
         if (!validateAllFields()) return;
-
         try {
             setStatus('loading');
             setStatusText('Signing up...');
@@ -121,7 +121,11 @@ const RegisterScreen = () => {
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'Sign up failed');
             const { token, user } = data;
-            await setAuth(token, user);
+            const userWithEnrollments: User = {
+                ...user,
+                enrollments: [],
+            };
+            await setAuth(token, userWithEnrollments);
             setStatus('success');
             setStatusText('Sign up successful!');
         } catch (error) {

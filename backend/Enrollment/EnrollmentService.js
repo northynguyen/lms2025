@@ -1,13 +1,18 @@
 import Enrollment from "./Enrollment.js";
-
+import Course from "../Course/Course.js";
 export const createEnrollment = async (userId, courseId) => {
     try {
+        const course = await Course.findById(courseId);
+        if (!course) return res.status(404).json({ message: "Course not found" });
+        const isFree = course.price === 0;
+
         const enrollment = new Enrollment({
             user: userId,
             course: courseId,
-            status: "PENDING",
-            statusHistory: [{ status: "PENDING" }]
+            status: isFree ? 'APPROVED' : 'PENDING',
+            statusHistory: [{ status: isFree ? 'APPROVED' : 'PENDING' }]
         });
+
         await enrollment.save();
         return enrollment;
     } catch (error) {
@@ -33,10 +38,9 @@ export const updateEnrollmentStatus = async (enrollmentId, newStatus) => {
     }
 };
 
-export const getEnrollmentByUserAndCourse = async (userId, courseId) => {
+export const getEnrollmentByUser = async (userId) => {
     try {
-        return await Enrollment.findOne({ user: userId, course: courseId })
-            .populate("user course");
+        return await Enrollment.find({ user: userId }).populate('course');
     } catch (error) {
         console.error("Error in getEnrollmentByUserAndCourse:", error);
         throw error;

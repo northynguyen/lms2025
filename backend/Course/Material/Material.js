@@ -24,7 +24,7 @@ const courseMaterialSchema = new mongoose.Schema({
     expectDuration: { type: Number },
     wordCount: { type: Number },
     contentItems: [contentItemSchema],
-    studyLogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'StudyLog' }],
+    //studyLogs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'StudyLog' }],
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, {

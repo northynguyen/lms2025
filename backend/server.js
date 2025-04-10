@@ -13,6 +13,7 @@ import SectionRoute from './Course/Section/SectionRoute.js';
 import MaterialRoute from './Course/Material/MaterialRoute.js';
 import SectionProgressRoute from './SectionProgress/SectionProgressRoute.js';
 import MaterialProgressRoute from './MaterialProgress/MaterialProgressRoute.js';
+import EnrollmentRoute from './Enrollment/EnrollmentRoute.js';
 const app = express();
 
 // Middleware
@@ -40,6 +41,7 @@ app.use('/api/section', SectionRoute);
 app.use('/api/material', MaterialRoute);
 app.use('/api/sectionProgress', SectionProgressRoute);
 app.use('/api/materialProgress', MaterialProgressRoute);
+app.use('/api/enrollment', EnrollmentRoute);
 
 
 

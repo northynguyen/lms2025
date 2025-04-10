@@ -9,5 +9,6 @@ router.get('/', sectionController.getAllSections);
 router.get('/:id', sectionController.getSectionById);
 router.put('/:id', authenticateUser, authorizeRoles('Admin', 'Superadmin', "Instructor"), sectionController.updateSection);
 router.delete('/:id', authenticateUser, authorizeRoles('Admin', 'Superadmin', "Instructor"), sectionController.deleteSection);
+//router.get("/course/:courseId", sectionController.getSectionsByCourseId);
 
 export default router;

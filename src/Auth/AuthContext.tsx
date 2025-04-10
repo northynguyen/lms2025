@@ -54,15 +54,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     setUser(JSON.parse(storedUser));
                 }
             } catch (error) {
-                console.error('Lỗi khi tải thông tin đăng nhập:', error);
+                console.error('Error loading auth:', error);
             } finally {
                 setLoading(false);
             }
         };
-
         loadAuth();
     }, []);
-
     if (loading) {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

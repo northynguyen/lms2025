@@ -42,6 +42,8 @@ export interface User {
     firstName: string;
     lastName: string;
     email: string;
+    createdAt: string;
+    enrollments: string[];
 }
 
 // Tạo Context để lưu trữ token và dữ liệu người dùng
@@ -59,4 +61,27 @@ export interface AnimationStatusProps {
     text?: string;
     onDone?: () => void;
     show?: boolean;
+}
+
+export interface ContentItem {
+    _id: string;
+    type: "VIDEO" | "IMAGE" | "TEXT" | "AUDIO" | "DOCUMENT";
+    text?: string;
+    url: string;
+}
+
+export interface Material {
+    _id: string;
+    section: string;
+    course: string;
+    materialType: "ASSIGNMENTS" | "LABS" | "LECTURES" | "REFERENCES" | "ASSESSMENTS";
+    materialName: string;
+    title: string;
+    orderNum: number;
+    expectDuration: number;
+    wordCount: number;
+    contentItems: ContentItem[];
+    studyLogs?: string[];
+    createdBy: string;
+    updatedBy: string;
 }

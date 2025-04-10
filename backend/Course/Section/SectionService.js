@@ -25,3 +25,6 @@ export const updateSection = async (id, updateData) => {
 export const deleteSection = async (id) => {
     return await Section.findByIdAndDelete(id);
 };
+// export const getSectionByCourseId = async (courseId) => {
+//     return await Section.find({ course: courseId }).populate('materials');
+// };

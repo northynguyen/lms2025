@@ -24,33 +24,33 @@ export const updateMaterial = async (id, updateData) => {
 
 export const getAllMaterials = async () => {
     return await CourseMaterial.find()
-        .populate('section', 'title')  // Chỉ lấy title của section
+        .populate('section', 'name')  // Chỉ lấy title của section
         .populate('course', 'name')    // Chỉ lấy name của course
-        .populate('createdBy', 'name email')  // Lấy name và email của người tạo
-        .populate('updatedBy', 'name email');
+        .populate('createdBy', 'firstName lastName  email')  // Lấy name và email của người tạo
+        .populate('updatedBy', 'firstName lastName  email');
 };
 
 export const getMaterialById = async (id) => {
     return await CourseMaterial.findById(id)
-        .populate('section', 'title')
+        .populate('section', 'name')
         .populate('course', 'name')
-        .populate('createdBy', 'name email')
-        .populate('updatedBy', 'name email')
-        .populate('studyLogs'); // Lấy đầy đủ studyLogs nếu cần
+        .populate('createdBy', 'firstName lastName  email')
+        .populate('updatedBy', 'firstName lastName  email')
+    // .populate('studyLogs'); // Lấy đầy đủ studyLogs nếu cần
 };
 
 export const getMaterialsByUser = async (userId) => {
     return await CourseMaterial.find({ createdBy: userId })
-        .populate('section', 'title')
+        .populate('section', 'name')
         .populate('course', 'name')
         .populate('updatedBy', 'name email');
 };
 
 export const getMaterialsByCourse = async (courseId) => {
     return await CourseMaterial.find({ course: courseId })
-        .populate('section', 'title')
-        .populate('createdBy', 'name email')
-        .populate('updatedBy', 'name email');
+        .populate('section', 'name')
+        .populate('createdBy', 'firstName lastName email',)
+        .populate('updatedBy', 'firstName lastName email');
 };
 
 export const deleteMaterial = async (id) => {

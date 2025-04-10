@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import User from '../User/User.js';
 import Role from '../Role/Role.js';
+import Enrollment from '../Enrollment/Enrollment.js';
 
 dotenv.config();
 const allowedRoles = ["Student", "Instructor"];
@@ -75,5 +76,7 @@ export const loginUser = async ({ username, password }) => {
 
     // Tạo token
     const token = generateToken(userWithRoleName);
-    return { user: userWithRoleName, token };
+    const enrollments = await Enrollment.find({ user: user._id }).populate('course');
+
+    return { user: userWithRoleName, token, enrollments };
 };

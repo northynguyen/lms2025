@@ -7,7 +7,7 @@ import CourseCard from '../Component/CourseCard';
 import { Course } from '../../Interfaces/Interfaces';
 
 const filters = ["All", "Beginner", "Intermediate", "Advanced"];
-const CoursesScreen: React.FC = () => {
+const CoursesScreen = () => {
     const { url } = useAuth();
     const [courses, setCourses] = useState<Course[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
