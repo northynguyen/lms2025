@@ -24,7 +24,9 @@ const CourseDetails = () => {
     const [course, setCourse] = useState<Course | null>(null);
     const [status, setStatus] = useState<'loading' | 'error' | 'success' | null>('loading');
     const [statusText, setStatusText] = useState<string>('Đang tải...');
-    console.log('user', user);
+    const isEnrolled = course && user?.enrollments.some(
+        (enrollment) => enrollment.course === course._id
+    );
     useEffect(() => {
         const fetchCourse = async () => {
             try {
@@ -85,6 +87,9 @@ const CourseDetails = () => {
             setStatusText(error instanceof Error ? error.message : 'Enrollment failed');
         }
     };
+    const handleStudyNow = () => {
+        console.log('Study now');
+    }
     return (
         <View style={styles.container}>
             <AnimationStatus status={status} text={statusText} onDone={() => setStatus(null)} show={!!status} />
@@ -100,11 +105,15 @@ const CourseDetails = () => {
                 <Tab.Screen name="Lesson" component={LessonScreen} initialParams={{ course }} />
                 <Tab.Screen name="Review" component={ReviewScreen} />
             </Tab.Navigator>
-
-            <TouchableOpacity style={styles.button} onPress={handlePaymentPress}>
-                <Text style={styles.buttonText}>GET ENROLL</Text>
-            </TouchableOpacity>
-
+            {isEnrolled ? (
+                <TouchableOpacity style={styles.buttonStudy} onPress={handleStudyNow}>
+                    <Text style={styles.buttonText}>STUDY NOW</Text>
+                </TouchableOpacity>
+            ) : (
+                <TouchableOpacity style={styles.buttonEnroll} onPress={handlePaymentPress}>
+                    <Text style={styles.buttonText}>GET ENROLL</Text>
+                </TouchableOpacity>
+            )}
         </View>
     );
 };
@@ -126,7 +135,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10,
     },
-    button: {
+    buttonEnroll: {
         backgroundColor: colors.primary,
         marginHorizontal: 20,
         paddingVertical: 15,
@@ -138,6 +147,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
         fontWeight: 'bold',
+    },
+    buttonStudy: {
+        backgroundColor: colors.warning,
+        marginHorizontal: 20,
+        paddingVertical: 15,
+        borderRadius: 25,
+        alignItems: 'center',
     }
 });
 

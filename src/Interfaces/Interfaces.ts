@@ -43,7 +43,7 @@ export interface User {
     lastName: string;
     email: string;
     createdAt: string;
-    enrollments: string[];
+    enrollments: Enrollment[];
 }
 
 // Tạo Context để lưu trữ token và dữ liệu người dùng
@@ -85,3 +85,17 @@ export interface Material {
     createdBy: string;
     updatedBy: string;
 }
+export interface Enrollment {
+    _id: string;
+    user: string; // userId
+    course: string; // courseId
+    status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED';
+    grade: number;
+    statusHistory: {
+        status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED';
+        createdAt: string;
+    }[];
+    createdAt: string;
+    updatedAt: string;
+}
+

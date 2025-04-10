@@ -5,6 +5,7 @@ import { Material } from '../../Interfaces/Interfaces';
 import colors from '../../Styles/color';
 import RenderHTML from 'react-native-render-html';
 import Video from 'react-native-video';
+import { Image } from 'react-native';
 // import { WebView } from 'react-native-webview'; không sử dụng được vì chưa có phiên bản phù hợp với react native 0.78
 const MaterialDetails = () => {
     const route = useRoute();
@@ -67,6 +68,12 @@ const MaterialDetails = () => {
                                     resizeMode="contain"
                                 />
                             </View>
+                        ) : content.type === 'IMAGE' ? (
+                            <Image
+                                source={{ uri: content.url }}
+                                style={{ width: '100%', height: 400, marginVertical: 10, borderRadius: 8 }}
+                                resizeMode="contain"
+                            />
                         ) : (
                             <Text style={styles.contentText}>🔗 Nội dung khác: {content.type}</Text>
                         )}
