@@ -2,15 +2,17 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeStudent from '../Student/HomeStudent';
 import CourseDetails from '../Student/Component/CourseDetails/CourseDetails';
-import MaterialDetails from '../Student/Component/MaterialDetails';
+import MaterialDetails from '../Student/Component/MaterialDetails/MaterialDetails';
 import PaymentScreen from '../Student/Component/Payment';
-import { Material } from '../Interfaces/Interfaces';
+import { Material, Section } from '../Interfaces/Interfaces';
+import AllCourse from '../Student/Component/AllCourse';
 
 export type StudentStackParamList = {
     StudentHome: undefined;
     CourseDetails: { courseId: string };
-    MaterialDetails: { materialData: Material };
+    MaterialDetails: { materialData: Material, courseSections: Section[] };
     PaymentScreen: undefined;
+    AllCourses: { autoFocusSearch: boolean } | undefined;
 };
 
 const Stack = createNativeStackNavigator<StudentStackParamList>();
@@ -29,6 +31,10 @@ const RouteStudent: React.FC = () => {
             />
             <Stack.Screen name="MaterialDetails" component={MaterialDetails} />
             <Stack.Screen name="PaymentScreen" component={PaymentScreen} options={{ title: 'Payment Method' }} />
+            <Stack.Screen name="AllCourses" component={AllCourse} options={{
+                headerTitle: "All Courses",
+                headerShadowVisible: false,
+            }} />
         </Stack.Navigator>
     );
 };

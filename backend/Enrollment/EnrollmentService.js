@@ -40,7 +40,9 @@ export const updateEnrollmentStatus = async (enrollmentId, newStatus) => {
 
 export const getEnrollmentByUser = async (userId) => {
     try {
-        return await Enrollment.find({ user: userId }).populate('course');
+        const enrollments = await Enrollment.find({ user: userId });
+        const courses = await Course.find({ _id: { $in: enrollments.map(enrollment => enrollment.course) } }).populate('createdBy updatedBy instructor prerequisites tags language sections');
+        return { enrollments, courses };
     } catch (error) {
         console.error("Error in getEnrollmentByUserAndCourse:", error);
         throw error;

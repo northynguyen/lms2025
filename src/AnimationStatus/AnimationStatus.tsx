@@ -75,11 +75,11 @@ const AnimationStatus: React.FC<AnimationStatusProps> = ({ status, text, onDone,
 const getDefaultText = (status: 'loading' | 'success' | 'error') => {
     switch (status) {
         case 'loading':
-            return 'Đang xử lý...';
+            return 'Loading...';
         case 'success':
-            return 'Thành công!';
+            return 'Success!';
         case 'error':
-            return 'Có lỗi xảy ra!';
+            return 'Error!';
         default:
             return '';
     }

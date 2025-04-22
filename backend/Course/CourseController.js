@@ -33,7 +33,7 @@ export const getCourseById = async (req, res) => {
 
 export const updateCourse = async (req, res) => {
     try {
-        const updateData = { ...req.body, updatedBy: req.createBy };
+        const updateData = { ...req.body, updatedBy: req.createdBy };
         const updatedCourse = await courseService.updateCourse(req.params.id, updateData, req.file);
         if (!updatedCourse) return res.status(404).json({ error: 'Course not found' });
         res.status(200).json(updatedCourse);
@@ -49,5 +49,15 @@ export const deleteCourse = async (req, res) => {
         res.status(200).json({ message: 'Course deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+};
+export const handleCourseSearch = async (req, res) => {
+    try {
+        const { query, level = 'All', page = 1, limit = 10 } = req.query;
+        const result = await courseService.searchCourses(query, level, parseInt(page), parseInt(limit));
+        res.json(result);
+    } catch (err) {
+        console.error('Search error:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };

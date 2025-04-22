@@ -4,7 +4,7 @@ import OverviewScreen from './Overview';
 import ReviewScreen from './Review';
 import AnimationStatus from '../../../AnimationStatus/AnimationStatus';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { RouteProp, useRoute, useNavigation, NavigationProp } from '@react-navigation/native';
 import { StudentStackParamList } from '../../../Main/RouteStudent';
 import { useAuth } from '../../../Auth/AuthContext';
@@ -20,25 +20,26 @@ const CourseDetails = () => {
     const navigation = useNavigation<NavigationProp<StudentStackParamList>>();
     const { courseId } = route.params;
     const { url, token, setAuth, user } = useAuth();
-
     const [course, setCourse] = useState<Course | null>(null);
     const [status, setStatus] = useState<'loading' | 'error' | 'success' | null>('loading');
     const [statusText, setStatusText] = useState<string>('Đang tải...');
     const isEnrolled = course && user?.enrollments.some(
-        (enrollment) => enrollment.course === course._id
+        (enrollment) => enrollment.course === courseId
     );
     useEffect(() => {
         const fetchCourse = async () => {
+            setStatus('loading');
+            setStatusText('Loading your course...');
             try {
                 const response = await fetch(`${url}/api/course/${courseId}`);
-                if (!response.ok) throw new Error('Lỗi khi tải khóa học');
+                if (!response.ok) throw new Error('Error fetching course');
                 const data = await response.json();
                 setCourse(data);
                 setStatus(null);
-                navigation.setOptions({ headerTitle: data.name || 'Chi tiết khóa học' });
+                navigation.setOptions({ headerTitle: data.name || 'Course details' });
             } catch (error) {
                 setStatus('error');
-                setStatusText('Lỗi khi tải khóa học');
+                setStatusText('Error fetching course');
                 console.error('Error fetching course:', error);
             }
         };
@@ -91,6 +92,7 @@ const CourseDetails = () => {
         console.log('Study now');
     }
     return (
+
         <View style={styles.container}>
             <AnimationStatus status={status} text={statusText} onDone={() => setStatus(null)} show={!!status} />
             <Image source={{ uri: course.image }} style={styles.image} />

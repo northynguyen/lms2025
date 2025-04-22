@@ -13,47 +13,36 @@ type OverviewRouteProp = RouteProp<{ Overview: { course: Course } }, 'Overview'>
 const LessonScreen = () => {
     const [course, setCourse] = useState<Course | null>(null);
     const [expandedSections, setExpandedSections] = useState<string[]>([]);
-    const [materialsCache, setMaterialsCache] = useState<{ [key: string]: Material[] }>({});
-    const { url } = useAuth();
 
     const route = useRoute<OverviewRouteProp>();
     const { course: courseData } = route.params;
+
     type NavigationProp = StackNavigationProp<StudentStackParamList, 'MaterialDetails'>;
     const navigation = useNavigation<NavigationProp>();
+
     useEffect(() => {
         if (courseData) {
             setCourse(courseData);
         }
     }, [courseData]);
 
-    const fetchMaterials = async (section: Section) => {
-        if (materialsCache[section._id]) return; // Nếu có cache thì không fetch lại
-
-        try {
-            const materialsData = await Promise.all(
-                section.materials.map(id =>
-                    fetch(`${url}/api/material/${id}`).then(res => res.json())
-                )
-            );
-            setMaterialsCache(prev => ({ ...prev, [section._id]: materialsData }));
-        } catch (error) {
-            console.error("Error fetching materials:", error);
-        }
-    };
-
     const toggleSection = (section: Section) => {
-        setExpandedSections(prev => {
-            if (prev.includes(section._id)) {
-                return prev.filter(id => id !== section._id); // Đóng section
-            } else {
-                fetchMaterials(section); // Mở section -> Fetch materials nếu cần
-                return [...prev, section._id];
-            }
-        });
+        setExpandedSections(prev =>
+            prev.includes(section._id)
+                ? prev.filter(id => id !== section._id)
+                : [...prev, section._id]
+        );
     };
+
     const handleMaterialPress = (material: Material) => {
-        navigation.navigate("MaterialDetails", { materialData: material });
+        navigation.navigate("MaterialDetails", { materialData: material, courseSections: courseData?.sections || [] });
     };
+
+    const truncateText = (text: string, maxLength: number) => {
+        if (!text) return '';
+        return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+    };
+
     const getMaterialIcon = (type: string) => {
         switch (type) {
             case "ASSIGNMENTS": return "clipboard-list";
@@ -67,13 +56,17 @@ const LessonScreen = () => {
 
     const renderSectionItem = ({ item }: { item: Section }) => {
         const isExpanded = expandedSections.includes(item._id);
-        const materials = materialsCache[item._id] || [];
+        const materials = item.materials || [];
 
         return (
             <View style={styles.sectionContainer}>
                 <TouchableOpacity onPress={() => toggleSection(item)} style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Chapter {item.orderNumber}: {item.name}</Text>
-                    <Icons name={isExpanded ? "chevron-up" : "chevron-down"} size={20} />
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                        <Icons name={isExpanded ? "chevron-down" : "chevron-right"} size={20} />
+                        <Text style={styles.sectionTitle} numberOfLines={1} ellipsizeMode="tail">
+                            Chapter {item.orderNumber}: {truncateText(item.name, 28)}
+                        </Text>
+                    </View>
                 </TouchableOpacity>
 
                 {isExpanded && (
@@ -98,6 +91,7 @@ const LessonScreen = () => {
 
     return (
         <View style={styles.container}>
+            {course?.sections.length === 0 && <Text style={styles.emptyText}>Can not find lectures</Text>}
             <FlatList
                 data={course?.sections.sort((a, b) => a.orderNumber - b.orderNumber)}
                 keyExtractor={(item) => item._id}
@@ -107,6 +101,7 @@ const LessonScreen = () => {
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -137,6 +132,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 10
+    },
+    emptyText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: colors.textPrimary,
     },
 });
 

@@ -61,7 +61,7 @@ export const registerUser = async ({ username, password, firstName, lastName, em
 
 // Đăng nhập người dùng
 export const loginUser = async ({ username, password }) => {
-    const user = await User.findOne({ username }).populate('role');
+    const user = await User.findOne({ username }).select('+password').populate('role');
 
     if (!user) throw new Error('User not found.');
 
@@ -76,7 +76,7 @@ export const loginUser = async ({ username, password }) => {
 
     // Tạo token
     const token = generateToken(userWithRoleName);
-    const enrollments = await Enrollment.find({ user: user._id }).populate('course');
+    const enrollments = await Enrollment.find({ user: user._id });
 
     return { user: userWithRoleName, token, enrollments };
 };

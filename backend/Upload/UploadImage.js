@@ -12,8 +12,13 @@ const storage = new CloudinaryStorage({
         if (!ALLOWED_IMAGE_FORMATS.includes(ext)) {
             throw new Error('Only image files are allowed (jpg, jpeg, png, webp)');
         }
+        const code = req.body.code;
+        console.log(req.body);
+        if (!code) {
+            throw new Error('Course code is required.');
+        }
         return {
-            folder: 'courses',
+            folder: `courses/${code}`,
             format: ext,
             public_id: `course_${Date.now()}`
         };

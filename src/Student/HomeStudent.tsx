@@ -35,11 +35,8 @@ const HomeStudent = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen} options={{ headerTitle: "FPT Software LMS", }} />
       <Tab.Screen name="Courses" component={CoursesScreen} options={{
-        headerTitle: "My Courses", headerStyle: {
-          elevation: 0,
-          shadowOpacity: 0,
-          borderBottomWidth: 0,
-        },
+        headerTitle: "My Courses",
+        headerShadowVisible: false,
       }} />
       <Tab.Screen name="Messages" component={MessageScreen} />
       <Tab.Screen name="Notions" component={NotionScreen} />

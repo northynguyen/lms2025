@@ -9,7 +9,7 @@ export interface Section {
     _id: string;
     name: string;
     orderNumber: number;
-    materials: string[];
+    materials: Material[];
     duration: number;
 }
 

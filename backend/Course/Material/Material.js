@@ -19,7 +19,7 @@ const courseMaterialSchema = new mongoose.Schema({
         required: true
     },
     materialName: { type: String, required: true },
-    title: { type: String, required: true },
+    title: { type: String },
     orderNum: { type: Number },
     expectDuration: { type: Number },
     wordCount: { type: Number },

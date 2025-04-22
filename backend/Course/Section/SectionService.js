@@ -4,6 +4,7 @@ import Section from './Section.js';
 // Tạo section mới
 export const createSection = async (sectionData) => {
     return await Section.create(sectionData);
+
 };
 
 // Lấy tất cả section theo bộ lọc

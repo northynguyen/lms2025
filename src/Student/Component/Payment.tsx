@@ -1,17 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 const PaymentScreen = () => {
+    const pdfUrl = 'https://res.cloudinary.com/lms2025/raw/upload/v1743645718/course_materials/movuhxyoqdgf8kg3qerj.docx';
+    const googleViewer = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(pdfUrl)}`;
+
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Welcom to the Payment Tab</Text>
+            <WebView
+                source={{ uri: googleViewer }}
+                style={styles.webview}
+                startInLoadingState={true}
+            />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    text: { fontSize: 18 },
+    container: { height: 400, width: '100%' },
+    webview: { flex: 1 },
 });
 
 export default PaymentScreen;

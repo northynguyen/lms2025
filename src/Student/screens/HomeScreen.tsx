@@ -13,12 +13,14 @@ import {
     Keyboard,
     ScrollView,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../Auth/AuthContext';
 import Icons from 'react-native-vector-icons/FontAwesome6';
 import colors from '../../Styles/color';
 import CourseCard from '../Component/CourseCard';
 import { Course } from '../../Interfaces/Interfaces';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { StudentStackParamList } from '../../Main/RouteStudent';
 const announcements = [
     { id: '1', title: 'New Course Available: Flutter Fundamentals', date: '3/20/2025' },
     { id: '2', title: 'System Maintenance: March 25th', date: '3/19/2025' },
@@ -28,11 +30,13 @@ const HomeScreen = () => {
     const { user, url } = useAuth();
     const [courses, setCourses] = useState<Course[]>([]);
     const [greeting, setGreeting] = useState('');
-    const [searchVisible, setSearchVisible] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-
-    const toggleSearch = () => {
-        setSearchVisible(!searchVisible);
+    type NavigationProp = StackNavigationProp<StudentStackParamList, 'AllCourses'>;
+    const navigation = useNavigation<NavigationProp>();
+    const handleAllCourses = () => {
+        navigation.navigate("AllCourses");
+    };
+    const handleSearch = () => {
+        navigation.navigate("AllCourses", { autoFocusSearch: true });
     };
     useEffect(() => {
         const getGreeting = () => {
@@ -48,7 +52,7 @@ const HomeScreen = () => {
 
         return () => clearInterval(interval);
     }, []);
-    //Lấy khóa học mà người dùng đang học, không phải lấy all
+
     useEffect(() => {
         const fetchCourses = async () => {
             try {
@@ -88,33 +92,18 @@ const HomeScreen = () => {
                         <Text style={styles.username}>{user?.firstName} {user?.lastName}</Text>
                     </View>
                     <TouchableOpacity
-                        style={[styles.searchButton, searchVisible && styles.searchButtonActive]}
-                        onPress={toggleSearch}
+                        style={[styles.searchButton]}
+                        onPress={handleSearch}
                     >
                         <Icons name="magnifying-glass" size={20} color="black" />
                     </TouchableOpacity>
                 </View>
 
-                {/* Search Bar */}
-                {searchVisible && (
-                    <View style={styles.searchContainer}>
-                        <TextInput
-                            style={styles.searchInput}
-                            placeholder="Search..."
-                            value={searchQuery}
-                            onChangeText={setSearchQuery}
-                        />
-                        <TouchableOpacity style={styles.searchButtonInput}>
-                            <Icons name="magnifying-glass" size={20} color="black" />
-                        </TouchableOpacity>
-                    </View>
-                )}
-
                 {/* Courses Section */}
                 <View>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>New Courses</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={handleAllCourses}>
                             <Text style={styles.viewAll}>View All →</Text>
                         </TouchableOpacity>
                     </View>
@@ -196,9 +185,6 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 50,
         backgroundColor: colors.background,
-    },
-    searchButtonActive: {
-        backgroundColor: 'gray',
     },
     sectionHeader: {
         flexDirection: 'row',

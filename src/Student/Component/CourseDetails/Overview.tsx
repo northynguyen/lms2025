@@ -15,7 +15,7 @@ const OverviewScreen = () => {
         const rows: string[][] = [];
         let currentRow: string[] = [];
         let currentLength = 0;
-        const maxPerRow = 20;
+        const maxPerRow = 0;
 
         sortedTags.forEach((tag) => {
             const tagLength = tag.tagName.length;

@@ -8,11 +8,9 @@ export const authenticateUser = async (req, res, next) => {
     try {
         const token = req.headers.token;
         if (!token) throw new Error('Token not found.');
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.id).populate('role');
         if (!user) throw new Error('User invalid.');
-
         req.user = user;
         next();
     } catch (error) {
