@@ -6,6 +6,7 @@ import MaterialDetails from '../Student/Component/MaterialDetails/MaterialDetail
 import PaymentScreen from '../Student/Component/Payment';
 import { Material, Section } from '../Interfaces/Interfaces';
 import AllCourse from '../Student/Component/AllCourse';
+import QuizzScreen from '../Student/Component/Quizz';
 
 export type StudentStackParamList = {
     StudentHome: undefined;
@@ -13,6 +14,7 @@ export type StudentStackParamList = {
     MaterialDetails: { materialData: Material, courseSections: Section[] };
     PaymentScreen: undefined;
     AllCourses: { autoFocusSearch: boolean } | undefined;
+    QuizzScreen: undefined
 };
 
 const Stack = createNativeStackNavigator<StudentStackParamList>();
@@ -35,6 +37,7 @@ const RouteStudent: React.FC = () => {
                 headerTitle: "All Courses",
                 headerShadowVisible: false,
             }} />
+            <Stack.Screen name="QuizzScreen" component={QuizzScreen} />
         </Stack.Navigator>
     );
 };

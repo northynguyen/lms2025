@@ -130,7 +130,9 @@ const HomeScreen = () => {
                             <Text style={styles.announcementDate}>{item.date}</Text>
                         </View>
                     ))}
+
                 </View>
+                <TouchableOpacity onPress={() => navigation.navigate("QuizzScreen")}><Text>text đầu vào</Text></TouchableOpacity>
             </ScrollView>
         </TouchableWithoutFeedback>
     );
